@@ -7,19 +7,27 @@ public class Task {
         this.isDone = false;
     }
 
-    public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
     public void markAsDone(){
         isDone = true;
     }
 
     public void markAsUndone(){
         isDone = false;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getStatusIcon() {
+        return " "; // mark done task with X
+    }
+
+    public String getType() {
+        return "T0";
+    }
+
+    public String listFormat(){
+        return ("[T][X] read book");
     }
 }
