@@ -13,34 +13,29 @@ public class Seemlmot {
     private static final String PARAM_FROM = "/from ";
     private static final String PARAM_TO = "/to ";
 
-    public static void main(String[] args) {
-        /*String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);*/
-
-        String Greeting = """
+    private static final String GREETING = """
                 ____________________________________________________________
                 Hello! I'm Seemlmot
                 What can I do for you?
                 ____________________________________________________________
                 """;
-        System.out.println(Greeting);
 
-        String Exit = """
+    private static final String EXIT = """
                 ____________________________________________________________
                 Bye. Hope to see you again soon!
                 ____________________________________________________________
                 """;
 
+
+    public static void main(String[] args) {
+        System.out.println(GREETING);
+
         cmdProcessing();
 
-        System.out.println(Exit);
+        System.out.println(EXIT);
     }
 
-    public static void cmdProcessing(){
+    public static void cmdProcessing() throws  SeemlmotException{
         Scanner in = new Scanner(System.in);
         String currentDescription = in.nextLine();
 
@@ -48,18 +43,37 @@ public class Seemlmot {
             String[] currentCmd = currentDescription.split(" ");
 
             System.out.println(HORIZONTAL_LINE);
-            switch(currentCmd[0]) {
-                case "list" -> list();
-                case "mark" -> mark(Integer.parseInt(currentCmd[1])-1, true);
-                case "unmark" -> mark(Integer.parseInt(currentCmd[1])-1, false);
-                case "todo" -> addTask(currentDescription, "T");
-                case "deadline" -> addTask(currentDescription, "D");
-                case  "event" -> addTask(currentDescription, "E");
-                default -> addTask(currentDescription, "T0");
+            try{
+                switch(currentCmd[0]) {
+                    case "list":
+                        list();
+                        break;
+                    case "mark":
+                        mark(Integer.parseInt(currentCmd[1]) - 1, true);
+                        break;
+                    case "unmark":
+                        mark(Integer.parseInt(currentCmd[1]) - 1, false);
+                        break;
+                    case "todo":
+                        addTask(currentDescription, "T");
+                        break;
+                    case "deadline":
+                        addTask(currentDescription, "D");
+                        break;
+                    case "event":
+                        addTask(currentDescription, "E");
+                        break;
+                    default:
+                        throw new SeemlmotException("I'm sorry, but I don't know what that means :-(");
+                }
+            }catch (SeemlmotException e){
+                System.out.println(e.getMessage());
+            }catch(IndexOutOfBoundsException e){
+                System.out.println("Task number required.");
+            }finally {
+                System.out.println(HORIZONTAL_LINE);
+                currentDescription = in.nextLine();
             }
-
-            System.out.println(HORIZONTAL_LINE);
-            currentDescription = in.nextLine();
         }
     }
 
@@ -68,7 +82,10 @@ public class Seemlmot {
 
         switch (type){
             case "T": {
-                description = currentDescription.substring(PREFIX_TODO.length()).trim();
+                description = currentDescription.substring(
+                        PREFIX_TODO.length()
+                ).trim();
+
                 cmdList[countCmd] = new ToDo(description);
                 break;
             }
@@ -79,6 +96,9 @@ public class Seemlmot {
                 description = currentDescription.substring(
                         PREFIX_DEADLINE.length(), byPos
                 ).trim();
+
+                if(!description.contains("/by"))
+                    throw new SeemlmotException("Deadline not found. Please add '/by'.");
 
                 String by = currentDescription.substring(byPos + PARAM_BY.length()).trim();
 
@@ -94,9 +114,15 @@ public class Seemlmot {
                         PREFIX_EVENT.length(), fromPos
                 ).trim();
 
+                if(!description.contains("/from"))
+                    throw new SeemlmotException("Start time not found. Please add '/from'.");
+
                 String start = currentDescription.substring(
                         fromPos + PARAM_FROM.length(), toPos
                 ).trim();
+
+                if(!description.contains("/to"))
+                    throw new SeemlmotException("End time not found. Please add '/to'.");
 
                 String end = currentDescription.substring(
                         toPos + PARAM_TO.length()
@@ -123,13 +149,15 @@ public class Seemlmot {
         }
     }
 
-    public static void mark(int index, boolean markAsDone){
-        if(markAsDone) {
+    public static void mark(int index, boolean markAsDone) {
+        if(index >= countCmd)
+            throw new SeemlmotException("Task does not exist.");
+
+        if (markAsDone) {
             cmdList[index].markAsDone();
             System.out.println(" Nice! I've marked this task as done:\n"
                     + "   " + cmdList[index]);
-        }
-        else{
+        } else {
             cmdList[index].markAsUndone();
             System.out.println(" OK, I've marked this task as not done yet:\n"
                     + "   " + cmdList[index]);
