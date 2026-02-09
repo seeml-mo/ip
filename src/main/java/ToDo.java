@@ -14,7 +14,7 @@ public class ToDo extends Task{
     }
 
     @Override
-    public String listFormat(){
-        return ("[" + getType() + "][" + getStatusIcon() + "] " + description);
+    public String toString(){
+        return ("[" + getType() + "][" + getStatusIcon() + "] " + getDescription());
     }
 }

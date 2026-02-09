@@ -12,7 +12,7 @@ public class Deadline extends ToDo{
     }
 
     @Override
-    public String listFormat(){
-        return ("[" + getType() + "][" + getStatusIcon() + "] " + description + " (by: " + by + ")");
+    public String toString(){
+        return ("[" + getType() + "][" + getStatusIcon() + "] " + getDescription() + " (by: " + by + ")");
     }
 }

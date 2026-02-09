@@ -26,8 +26,4 @@ public class Task {
     public String getType() {
         return "T0";
     }
-
-    public String listFormat(){
-        return ("[T][X] read book");
-    }
 }

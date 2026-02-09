@@ -1,5 +1,5 @@
 public class Event extends Deadline{
-    private String start;
+    private final String start;
     public Event(String description, String start, String by){
         super(description, by);
         this.start = start;
@@ -11,7 +11,7 @@ public class Event extends Deadline{
     }
 
     @Override
-    public String listFormat(){
-        return ("[" + getType() + "][" + getStatusIcon() + "] " + description + " (from: " + start + " to: " + by + ")");
+    public String toString(){
+        return ("[" + getType() + "][" + getStatusIcon() + "] " + getDescription() + " (from: " + start + " to: " + by + ")");
     }
 }

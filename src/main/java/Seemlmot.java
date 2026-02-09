@@ -2,7 +2,8 @@ import java.util.Scanner;
 
 public class Seemlmot {
     public static int countCmd = 0;
-    public static Task[] cmdList = new Task[100];
+    public static final int MAX_TASKS = 100;
+    public static Task[] cmdList = new Task[MAX_TASKS];
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
 
     private static final String PREFIX_TODO = "todo ";
@@ -64,7 +65,6 @@ public class Seemlmot {
 
     public static void addTask(String currentDescription, String type){
         String description;
-        int prefix;
 
         switch (type){
             case "T": {
@@ -112,14 +112,14 @@ public class Seemlmot {
         }
 
         System.out.println(" Got it. I've added this task:");
-        System.out.println("   " + cmdList[countCmd].listFormat());
+        System.out.println("   " + cmdList[countCmd]);
         String taskExpression = countCmd==0? "task":"tasks";
         System.out.println(" Now you have " + (++countCmd) + " " + taskExpression + " in the list.");
     }
     public static void list(){
         System.out.println(" Here are the tasks in your list:");
         for(int i = 0; i < countCmd; i++){
-            System.out.println(" " + i+1 + "." + cmdList[i].listFormat() );
+            System.out.println(" " + (i+1) + "." + cmdList[i] );
         }
     }
 
@@ -127,12 +127,12 @@ public class Seemlmot {
         if(markAsDone) {
             cmdList[index].markAsDone();
             System.out.println(" Nice! I've marked this task as done:\n"
-                    + "    [" + cmdList[index].getStatusIcon() +"] " + cmdList[index].getDescription());
+                    + "   " + cmdList[index]);
         }
         else{
             cmdList[index].markAsUndone();
             System.out.println(" OK, I've marked this task as not done yet:\n"
-                    + "    [" + cmdList[index].getStatusIcon() +"] " + cmdList[index].getDescription());
+                    + "   " + cmdList[index]);
         }
     }
 }
