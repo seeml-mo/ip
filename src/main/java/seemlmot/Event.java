@@ -1,3 +1,5 @@
+package seemlmot;
+
 public class Event extends Deadline{
     private final String start;
     public Event(String description, String start, String by){

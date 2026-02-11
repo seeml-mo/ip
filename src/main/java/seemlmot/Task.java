@@ -1,3 +1,5 @@
+package seemlmot;
+
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -20,7 +22,7 @@ public class Task {
     }
 
     public String getStatusIcon() {
-        return " "; // mark done task with X
+        return (isDone? "X" : " "); // mark done task with X
     }
 
     public String getType() {

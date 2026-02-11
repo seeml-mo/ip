@@ -1,3 +1,5 @@
+package seemlmot;
+
 public class SeemlmotException extends RuntimeException {
     private String message;
 

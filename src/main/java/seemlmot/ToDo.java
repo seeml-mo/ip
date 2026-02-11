@@ -1,3 +1,5 @@
+package seemlmot;
+
 public class ToDo extends Task{
     public  ToDo(String description){
         super(description);
@@ -5,7 +7,7 @@ public class ToDo extends Task{
 
     @Override
     public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+        return "error"; // mark done task with X
     }
 
     @Override

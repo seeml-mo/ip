@@ -1,3 +1,5 @@
+package seemlmot;
+
 import java.util.Scanner;
 
 public class Seemlmot {

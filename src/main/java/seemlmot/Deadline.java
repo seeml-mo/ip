@@ -1,3 +1,5 @@
+package seemlmot;
+
 public class Deadline extends ToDo{
     protected String by;
 
