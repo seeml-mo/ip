@@ -93,12 +93,12 @@ public class Seemlmot {
             case "D": {
                 int byPos = currentDescription.indexOf(PARAM_BY);
 
+                if(byPos == -1)
+                    throw new SeemlmotException("Deadline not found. Please add '/by'.");
+
                 description = currentDescription.substring(
                         PREFIX_DEADLINE.length(), byPos
                 ).trim();
-
-                if(!description.contains("/by"))
-                    throw new SeemlmotException("Deadline not found. Please add '/by'.");
 
                 String by = currentDescription.substring(byPos + PARAM_BY.length()).trim();
 
@@ -110,19 +110,19 @@ public class Seemlmot {
                 int fromPos = currentDescription.indexOf(PARAM_FROM);
                 int toPos = currentDescription.indexOf(PARAM_TO);
 
+                if(fromPos == -1)
+                    throw new SeemlmotException("End time not found. Please add '/to'.");
+
+                if(toPos == -1)
+                    throw new SeemlmotException("Start time not found. Please add '/from'.");
+
                 description = currentDescription.substring(
                         PREFIX_EVENT.length(), fromPos
                 ).trim();
 
-                if(!description.contains("/from"))
-                    throw new SeemlmotException("Start time not found. Please add '/from'.");
-
                 String start = currentDescription.substring(
                         fromPos + PARAM_FROM.length(), toPos
                 ).trim();
-
-                if(!description.contains("/to"))
-                    throw new SeemlmotException("End time not found. Please add '/to'.");
 
                 String end = currentDescription.substring(
                         toPos + PARAM_TO.length()
