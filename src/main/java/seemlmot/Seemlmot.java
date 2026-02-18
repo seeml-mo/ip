@@ -1,11 +1,11 @@
 package seemlmot;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Seemlmot {
-    public static int countCmd = 0;
     public static final int MAX_TASKS = 100;
-    public static Task[] cmdList = new Task[MAX_TASKS];
+    public static ArrayList<Task> cmdList = new ArrayList<>();
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
 
     private static final String PREFIX_TODO = "todo ";
@@ -41,7 +41,7 @@ public class Seemlmot {
         Scanner in = new Scanner(System.in);
         String currentDescription = in.nextLine();
 
-        while(!currentDescription.trim().equals("bye") && countCmd < 100) {
+        while(!currentDescription.trim().equals("bye") && cmdList.size() < MAX_TASKS) {
             String[] currentCmd = currentDescription.split(" ");
 
             System.out.println(HORIZONTAL_LINE);
@@ -55,6 +55,9 @@ public class Seemlmot {
                         break;
                     case "unmark":
                         mark(Integer.parseInt(currentCmd[1]) - 1, false);
+                        break;
+                    case "delete":
+                        deleteTask(Integer.parseInt(currentCmd[1]) - 1);
                         break;
                     case "todo":
                         addTask(currentDescription, "T");
@@ -70,8 +73,6 @@ public class Seemlmot {
                 }
             }catch (SeemlmotException e){
                 System.out.println(e.getMessage());
-            }catch(IndexOutOfBoundsException e){
-                System.out.println("Task number required.");
             }finally {
                 System.out.println(HORIZONTAL_LINE);
                 currentDescription = in.nextLine();
@@ -84,11 +85,15 @@ public class Seemlmot {
 
         switch (type){
             case "T": {
+                if (currentDescription.trim().length() <= PREFIX_TODO.length()) {
+                    throw new SeemlmotException("OOPS!!! The description of a todo cannot be empty.");
+                }
+
                 description = currentDescription.substring(
                         PREFIX_TODO.length()
                 ).trim();
 
-                cmdList[countCmd] = new ToDo(description);
+                cmdList.add(new ToDo(description));
                 break;
             }
 
@@ -102,9 +107,13 @@ public class Seemlmot {
                         PREFIX_DEADLINE.length(), byPos
                 ).trim();
 
+                if (description.isEmpty()) {
+                    throw new SeemlmotException("OOPS!!! The description of a deadline cannot be empty.");
+                }
+
                 String by = currentDescription.substring(byPos + PARAM_BY.length()).trim();
 
-                cmdList[countCmd] = new Deadline(description, by);
+                cmdList.add(new Deadline(description, by));
                 break;
             }
 
@@ -113,14 +122,18 @@ public class Seemlmot {
                 int toPos = currentDescription.indexOf(PARAM_TO);
 
                 if(fromPos == -1)
-                    throw new SeemlmotException("End time not found. Please add '/to'.");
+                    throw new SeemlmotException("Start time not found. Please add '/to'.");
 
                 if(toPos == -1)
-                    throw new SeemlmotException("Start time not found. Please add '/from'.");
+                    throw new SeemlmotException("End time not found. Please add '/from'.");
 
                 description = currentDescription.substring(
                         PREFIX_EVENT.length(), fromPos
                 ).trim();
+
+                if (description.isEmpty()) {
+                    throw new SeemlmotException("OOPS!!! The description of an event cannot be empty.");
+                }
 
                 String start = currentDescription.substring(
                         fromPos + PARAM_FROM.length(), toPos
@@ -130,39 +143,51 @@ public class Seemlmot {
                         toPos + PARAM_TO.length()
                 ).trim();
 
-                cmdList[countCmd] = new Event(description, start, end);
+                cmdList.add(new Event(description, start, end));
                 break;
             }
 
             default: {
-                 cmdList[countCmd] = new Task(currentDescription);
+                 cmdList.add(new Task(currentDescription));
             }
         }
 
         System.out.println(" Got it. I've added this task:");
-        System.out.println("   " + cmdList[countCmd]);
-        String taskExpression = countCmd==0? "task":"tasks";
-        System.out.println(" Now you have " + (++countCmd) + " " + taskExpression + " in the list.");
+        System.out.println("   " + cmdList.get(cmdList.size() - 1));
+        String taskExpression = (cmdList.size() == 1)? "task":"tasks";
+        System.out.println(" Now you have " + cmdList.size() + " " + taskExpression + " in the list.");
     }
     public static void list(){
         System.out.println(" Here are the tasks in your list:");
-        for(int i = 0; i < countCmd; i++){
-            System.out.println(" " + (i+1) + "." + cmdList[i] );
+        for(int i = 0; i < ( cmdList.size() ); i++){
+            System.out.println(" " + (i+1) + "." + cmdList.get(i) );
         }
     }
 
     public static void mark(int index, boolean markAsDone) {
-        if(index >= countCmd)
+        if(index >= cmdList.size())
             throw new SeemlmotException("Task does not exist.");
 
         if (markAsDone) {
-            cmdList[index].markAsDone();
+            cmdList.get(index).markAsDone();
             System.out.println(" Nice! I've marked this task as done:\n"
-                    + "   " + cmdList[index]);
+                    + "   " + cmdList.get(index));
         } else {
-            cmdList[index].markAsUndone();
+            cmdList.get(index).markAsUndone();
             System.out.println(" OK, I've marked this task as not done yet:\n"
-                    + "   " + cmdList[index]);
+                    + "   " + cmdList.get(index));
         }
+    }
+
+    public static void deleteTask(int index){
+        if(index >= cmdList.size())
+            throw new SeemlmotException("Task does not exist.");
+
+        System.out.println("Noted. I've removed this task:\n" +
+                "  " + cmdList.get(index) );
+
+        cmdList.remove(index);
+
+        System.out.println("Now you have " + cmdList.size() + " tasks in the list.");
     }
 }

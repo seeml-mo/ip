@@ -1,0 +1,38 @@
+____________________________________________________________
+Hello! I'm Seemlmot
+What can I do for you?
+____________________________________________________________
+
+____________________________________________________________
+ Got it. I've added this task:
+   [T][ ] Francis: Answer CS2113 tutorial questions
+ Now you have 1 task in the list.
+____________________________________________________________
+____________________________________________________________
+ Got it. I've added this task:
+   [D][ ] weekly CS2113 quiz (by: Monday 9pm)
+ Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1.[T][ ] Francis: Answer CS2113 tutorial questions
+ 2.[D][ ] weekly CS2113 quiz (by: Monday 9pm)
+____________________________________________________________
+____________________________________________________________
+ Got it. I've added this task:
+   [E][ ] CS2113 lecture (from: Friday 4 to: 6 pm)
+ Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+ Nice! I've marked this task as done:
+   [T][X] Francis: Answer CS2113 tutorial questions
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1.[T][X] Francis: Answer CS2113 tutorial questions
+ 2.[D][ ] weekly CS2113 quiz (by: Monday 9pm)
+ 3.[E][ ] CS2113 lecture (from: Friday 4 to: 6 pm)
+____________________________________________________________
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________

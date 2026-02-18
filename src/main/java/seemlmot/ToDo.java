@@ -6,11 +6,6 @@ public class ToDo extends Task{
     }
 
     @Override
-    public String getStatusIcon() {
-        return "error"; // mark done task with X
-    }
-
-    @Override
     public String getType() {
         return "T";
     }
