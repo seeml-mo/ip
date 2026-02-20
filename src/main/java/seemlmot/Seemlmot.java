@@ -83,35 +83,35 @@ public class Seemlmot {
         String content;
         switch(parts[0]) {
             case "T":
-                if(parts.length > REQUIREMENT_TODO)
+                if (parts.length > REQUIREMENT_TODO)
                     throw new SeemlmotException(" Error File: Unexpected additional info.");
 
                 content = PREFIX_TODO + parts[2].trim();
                 addTask(content, "T", false);
 
-                if(Integer.parseInt(parts[1]) == 1)
+                if (Integer.parseInt(parts[1]) == 1)
                     cmdList.get((cmdList.size() - 1)).markAsDone();
 
                 break;
             case "D":
-                if(parts.length > REQUIREMENT_DEADLINE)
+                if (parts.length > REQUIREMENT_DEADLINE)
                     throw new SeemlmotException(" Error File: Unexpected additional info.");
 
                 content = PREFIX_DEADLINE + parts[2].trim() + " " + PARAM_BY + parts[3].trim();
                 addTask(content, "D", false);
 
-                if(Integer.parseInt(parts[1]) == 1)
+                if (Integer.parseInt(parts[1]) == 1)
                     cmdList.get((cmdList.size() - 1)).markAsDone();
 
                 break;
             case "E":
-                if(parts.length > REQUIREMENT_EVENT)
+                if (parts.length > REQUIREMENT_EVENT)
                     throw new SeemlmotException(" Error File: Unexpected additional info.");
 
                 content = PREFIX_EVENT + parts[2].trim() + " " + PARAM_FROM + parts[3].trim() + " " + PARAM_BY + parts[4].trim();
                 addTask(content, "E", false);
 
-                if(Integer.parseInt(parts[1]) == 1)
+                if (Integer.parseInt(parts[1]) == 1)
                     cmdList.get((cmdList.size() - 1)).markAsDone();
 
                 break;
@@ -186,7 +186,7 @@ public class Seemlmot {
             case "D": {
                 int byPos = currentDescription.indexOf(PARAM_BY);
 
-                if(byPos == -1)
+                if (byPos == -1)
                     throw new SeemlmotException(" Deadline not found. Please add '/by'.");
 
                 description = currentDescription.substring(
@@ -207,10 +207,10 @@ public class Seemlmot {
                 int fromPos = currentDescription.indexOf(PARAM_FROM);
                 int toPos = currentDescription.indexOf(PARAM_TO);
 
-                if(fromPos == -1)
+                if (fromPos == -1)
                     throw new SeemlmotException(" Start time not found. Please add '/to'.");
 
-                if(toPos == -1)
+                if (toPos == -1)
                     throw new SeemlmotException(" End time not found. Please add '/from'.");
 
                 description = currentDescription.substring(
@@ -238,7 +238,7 @@ public class Seemlmot {
             }
         }
 
-        if(isTerminalCmd){
+        if (isTerminalCmd){
             System.out.println(" Got it. I've added this task:");
             System.out.println("   " + cmdList.get(cmdList.size() - 1));
             String taskExpression = (cmdList.size() == 1)? "task":"tasks";
@@ -246,7 +246,7 @@ public class Seemlmot {
         }
     }
     public static void list(String currentDescription){
-        if(currentDescription.trim().length() > PREFIX_LIST.length())
+        if (currentDescription.trim().length() > PREFIX_LIST.length())
             throw new SeemlmotException(" No need to add additional description. Only \"list\" needed.");
         System.out.println(" Here are the tasks in your list:");
         for(int i = 0; i < ( cmdList.size() ); i++){
@@ -270,7 +270,7 @@ public class Seemlmot {
     }
 
     public static void deleteTask(int index){
-        if(index >= cmdList.size())
+        if (index >= cmdList.size())
             throw new SeemlmotException(" Task does not exist.");
 
         System.out.println(" Noted. I've removed this task:\n" +
@@ -282,7 +282,7 @@ public class Seemlmot {
     }
 
     public static void saveState(String currentDescription){
-        if(currentDescription.trim().length() > PREFIX_SAVE.length())
+        if (currentDescription.trim().length() > PREFIX_SAVE.length())
             throw new SeemlmotException(" No need to add additional description. Only \"save\" needed.");
 
         try {
