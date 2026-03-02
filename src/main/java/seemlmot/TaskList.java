@@ -3,19 +3,33 @@ package seemlmot;
 import java.time.*;
 import java.util.ArrayList;
 
+/**
+ * Manages the list of tasks for the Seemlmot chatbot.
+ * Provides functionality to add, delete, mark, and search for tasks.
+ */
 public class TaskList {
     public static final int MAX_TASKS = 100;
-    public static final String PREFIX_LIST = "list";
-    public static final String PREFIX_TODO = "todo ";
-    public static final String PREFIX_DEADLINE = "deadline ";
-    public static final String PREFIX_EVENT = "event ";
-    public static final String PREFIX_FIND = "find ";
+    private static final String PREFIX_LIST = "list";
+    private static final String PREFIX_TODO = "todo ";
+    private static final String PREFIX_DEADLINE = "deadline ";
+    private static final String PREFIX_EVENT = "event ";
+    private static final String PREFIX_FIND = "find ";
     public static final String PARAM_BY = "/by ";
     public static final String PARAM_FROM = "/from ";
     public static final String PARAM_TO = "/to ";
 
+    /** The internal list used to store Task objects. */
     public static ArrayList<Task> cmdList = new ArrayList<>();
 
+    /**
+     * Adds a new task to the list based on user input and task type.
+     * Supports ToDo (T), Deadline (D), and Event (E) types.
+     *
+     * @param currentDescription The full raw command string from the user.
+     * @param type The type of task to add ("T", "D", or "E").
+     * @param isTerminalCmd True if the operation should print feedback to the console.
+     * @throws SeemlmotException If description is missing or date/time format is invalid.
+     */
     public static void addTask(String currentDescription, String type, boolean isTerminalCmd) {
         String description;
 
@@ -109,6 +123,12 @@ public class TaskList {
         }
     }
 
+    /**
+     * Displays all tasks currently in the list to the user.
+     *
+     * @param currentDescription The command string, expected to be just "list".
+     * @throws SeemlmotException If extra arguments are provided after "list".
+     */
     public static void list(String currentDescription) {
         if (currentDescription.trim().length() > PREFIX_LIST.length())
             throw new SeemlmotException(" No need to add additional description. Only \"list\" needed.");
@@ -118,6 +138,13 @@ public class TaskList {
         }
     }
 
+    /**
+     * Marks a specific task as done or undone.
+     *
+     * @param index The 0-based index of the task in the list.
+     * @param markAsDone True to mark as done, false to mark as undone.
+     * @throws SeemlmotException If the provided index is out of bounds.
+     */
     public static void mark(int index, boolean markAsDone) {
         if (index >= cmdList.size())
             throw new SeemlmotException(" Task does not exist.");
@@ -133,6 +160,12 @@ public class TaskList {
         }
     }
 
+    /**
+     * Removes a task from the list at the specified index.
+     *
+     * @param index The 0-based index of the task to be deleted.
+     * @throws SeemlmotException If the index is invalid.
+     */
     public static void deleteTask(int index) {
         if (index >= cmdList.size())
             throw new SeemlmotException(" Task does not exist.");
@@ -145,6 +178,13 @@ public class TaskList {
         System.out.println(" Now you have " + cmdList.size() + " tasks in the list.");
     }
 
+    /**
+     * Searches for tasks whose descriptions contain the specified keyword.
+     * The search is case-insensitive.
+     *
+     * @param currentDescription The raw search command containing the keyword.
+     * @throws SeemlmotException If the keyword is missing.
+     */
     public static void findTask(String currentDescription) {
         if (currentDescription.trim().length() <= PREFIX_FIND.length()) {
             throw new SeemlmotException(" Description is empty. Please provide the content you are searching for.");
@@ -168,10 +208,20 @@ public class TaskList {
         }
     }
 
+    /**
+     * Returns the current internal task list.
+     *
+     * @return An ArrayList of Task objects.
+     */
     public static ArrayList<Task> getCmdList(){
         return cmdList;
     }
 
+    /**
+     * Initializes the task list with existing data, usually from a file.
+     *
+     * @param dataList The ArrayList of tasks to load.
+     */
     public static void initialize(ArrayList<Task> dataList){
         cmdList = dataList;
     }

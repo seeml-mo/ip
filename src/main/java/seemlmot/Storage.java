@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles loading and saving tasks from/to a hard disk file.
+ * This class ensures that the chatbot's state is preserved between sessions.
+ */
 public class Storage {
     public static final String FILE_PATH = "./data/seemlmot.txt";
     private static final String PREFIX_SAVE = "save";
@@ -18,6 +22,12 @@ public class Storage {
 
     private static final ArrayList<Task> dataList = new ArrayList<>();
 
+    /**
+     * Loads tasks from the storage file defined in {@code FILE_PATH}.
+     * If the file or directory does not exist, it starts with an empty list.
+     *
+     * @return An ArrayList of tasks retrieved from the file.
+     */
     public static ArrayList<Task> loadData() {
 
         Path path = Paths.get(FILE_PATH);
@@ -43,6 +53,14 @@ public class Storage {
         return dataList;
     }
 
+    /**
+     * Parses a single line from the storage file and adds the corresponding task to {@code dataList}.
+     * This is a non-trivial private method that handles data validation and type-specific parsing.
+     *
+     * @param line A single line of text from the saved file.
+     * @throws IOException If the task type is unrecognized or file format is corrupted.
+     * @throws SeemlmotException If required parameters are missing in the data line.
+     */
     private static void createTaskFromType(String line) throws IOException {
         String[] parts = line.split(" \\| ");
         String description;
@@ -107,8 +125,14 @@ public class Storage {
         }
     }
 
-
-
+    /**
+     * Saves the current list of tasks to the hard disk.
+     * Creates the directory structure if it does not already exist.
+     *
+     * @param currentDescription The command string, expected to be just "save".
+     * @param cmdList The current list of tasks to be written to the file.
+     * @throws SeemlmotException If additional arguments are provided after "save".
+     */
     public static void saveState(String currentDescription, ArrayList<Task> cmdList) {
         if (currentDescription.trim().length() > PREFIX_SAVE.length())
             throw new SeemlmotException(" No need to add additional description. Only \"save\" needed.");

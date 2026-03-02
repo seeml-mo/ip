@@ -5,7 +5,20 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 
+/**
+ * Handles the interpretation of user input and commands.
+ * This class provides functionality to process main command loops and
+ * parse flexible date/time strings into LocalDateTime objects.
+ */
 public class Parser {
+    /**
+     * Starts the main command processing loop.
+     * Continuously reads user input from the console, identifies the command type,
+     * and executes corresponding actions in TaskList or Storage.
+     * The loop terminates when the user enters "bye" or the task limit is reached.
+     *
+     * @throws SeemlmotException If an unrecognized command is entered or task limits are exceeded.
+     */
     public static void processCmd() throws SeemlmotException {
         Scanner in = new Scanner(System.in);
         String currentDescription = in.nextLine();
@@ -56,6 +69,19 @@ public class Parser {
         }
     }
 
+    /**
+     * Attempts to parse a flexible date/time string into a LocalDateTime object.
+     * <p>
+     * The method tries to identify dates through keywords (e.g., "today", "tomorrow", "monday"),
+     * and interprets time strings (e.g., "2pm", "1400"). If a specific date is not found
+     * but a startTime is provided, it inherits the date from the startTime.
+     * </p>
+     *
+     * @param input The raw date/time string provided by the user.
+     * @param startTime A reference time used for date inheritance or overnight checks.
+     * @return A LocalDateTime object representing the interpreted date and time.
+     * @throws DateTimeException If the date or time cannot be recognized from the input.
+     */
     public static LocalDateTime guessFlexible(String input, LocalDateTime startTime) throws DateTimeException {
         String cleanInput = input.trim().toLowerCase();
 
