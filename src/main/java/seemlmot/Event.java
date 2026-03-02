@@ -1,8 +1,11 @@
 package seemlmot;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+
 public class Event extends Deadline{
-    private final String start;
-    public Event(String description, String start, String by){
+    private final LocalDateTime start;
+    public Event(String description, LocalDateTime start, LocalDateTime by){
         super(description, by);
         this.start = start;
     }
@@ -14,6 +17,7 @@ public class Event extends Deadline{
 
     @Override
     public String toString(){
-        return ("[" + getType() + "][" + getStatusIcon() + "] " + getDescription() + " (from: " + start + " to: " + by + ")");
+        DateTimeFormatter out = DateTimeFormatter.ofPattern("MMM dd yyyy HHmm");
+        return ("[" + getType() + "][" + getStatusIcon() + "] " + getDescription() + " (from: " + start.format(out) + " to: " + by.format(out) + ")");
     }
 }

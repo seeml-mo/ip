@@ -1,9 +1,12 @@
 package seemlmot;
 
-public class Deadline extends ToDo{
-    protected String by;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Deadline(String description, String by){
+public class Deadline extends ToDo{
+    protected LocalDateTime by;
+
+    public Deadline(String description, LocalDateTime by){
         super(description);
         this.by = by;
     }
@@ -15,6 +18,7 @@ public class Deadline extends ToDo{
 
     @Override
     public String toString(){
-        return ("[" + getType() + "][" + getStatusIcon() + "] " + getDescription() + " (by: " + by + ")");
+        DateTimeFormatter out = DateTimeFormatter.ofPattern("MMM dd yyyy HHmm");
+        return ("[" + getType() + "][" + getStatusIcon() + "] " + getDescription() + " (by: " + by.format(out) + ")");
     }
 }

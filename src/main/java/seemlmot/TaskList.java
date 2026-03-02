@@ -1,5 +1,6 @@
 package seemlmot;
 
+import java.time.*;
 import java.util.ArrayList;
 
 public class TaskList {
@@ -45,10 +46,12 @@ public class TaskList {
                 throw new SeemlmotException(" OOPS!!! The description of a deadline cannot be empty.");
             }
 
-            String by = currentDescription.substring(byPos + PARAM_BY.length()).trim();
+            String byString = currentDescription.substring(byPos + PARAM_BY.length()).trim();
 
-            if (by.isEmpty())
+            if (byString.isEmpty())
                 throw new SeemlmotException("Do not leave deadline empty!!!");
+
+            LocalDateTime by = Parser.guessFlexible(byString, null);
 
             cmdList.add(new Deadline(description, by));
             break;
@@ -72,18 +75,21 @@ public class TaskList {
                 throw new SeemlmotException(" OOPS!!! The description of an event cannot be empty.");
             }
 
-            String start = currentDescription.substring(
+            String startString = currentDescription.substring(
                     fromPos + PARAM_FROM.length(), toPos
             ).trim();
 
-            String end = currentDescription.substring(
+            String endString = currentDescription.substring(
                     toPos + PARAM_TO.length()
             ).trim();
 
-            if (start.isEmpty())
+            if (startString.isEmpty())
                 throw new SeemlmotException("Do not leave start time empty!!!");
-            if(end.isEmpty())
+            if(endString.isEmpty())
                 throw new SeemlmotException("Do not leave end time empty!!!");
+
+            LocalDateTime start = Parser.guessFlexible(startString, null);
+            LocalDateTime end = Parser.guessFlexible(endString, start);
 
             cmdList.add(new Event(description, start, end));
             break;
