@@ -9,6 +9,7 @@ public class TaskList {
     public static final String PREFIX_TODO = "todo ";
     public static final String PREFIX_DEADLINE = "deadline ";
     public static final String PREFIX_EVENT = "event ";
+    public static final String PREFIX_FIND = "find ";
     public static final String PARAM_BY = "/by ";
     public static final String PARAM_FROM = "/from ";
     public static final String PARAM_TO = "/to ";
@@ -142,6 +143,29 @@ public class TaskList {
         cmdList.remove(index);
 
         System.out.println(" Now you have " + cmdList.size() + " tasks in the list.");
+    }
+
+    public static void findTask(String currentDescription) {
+        if (currentDescription.trim().length() <= PREFIX_FIND.length()) {
+            throw new SeemlmotException(" Description is empty. Please provide the content you are searching for.");
+        }
+        String keyword = currentDescription.substring(
+                PREFIX_FIND.length()
+        ).trim();
+
+        int count = 1;
+        for (Task task : cmdList) {
+            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                if (count == 1)
+                    System.out.println(" Here are the matching tasks in your list:");
+                System.out.println(count + ". " + task);
+                count++;
+            }
+        }
+
+        if (count == 1) {
+            System.out.println(" No matching tasks found for: " + keyword);
+        }
     }
 
     public static ArrayList<Task> getCmdList(){
