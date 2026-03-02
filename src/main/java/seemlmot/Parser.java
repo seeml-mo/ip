@@ -41,6 +41,9 @@ public class Parser {
                 case "save":
                     Storage.saveState(currentDescription, TaskList.getCmdList());
                     break;
+                case "find":
+                    TaskList.findTask(currentDescription);
+                    break;
                 default:
                     throw new SeemlmotException(" I'm sorry, but I don't know what that means :-(");
                 }
