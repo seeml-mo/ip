@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,9 @@ public class Storage {
 
             description = parts[2].trim();
 
-            String by = parts[3].trim();
+            String byString = parts[3].trim();
+
+            LocalDateTime by = Parser.guessFlexible(byString, null);
 
             dataList.add(new Deadline(description, by));
 
@@ -87,10 +90,12 @@ public class Storage {
 
             description = parts[2].trim();
 
-            String start, end;
-            start = parts[3].trim();
-            end = parts[3].trim();
+            String startString, endString;
+            startString = parts[3].trim();
+            endString = parts[3].trim();
 
+            LocalDateTime start = Parser.guessFlexible(startString, null);
+            LocalDateTime end = Parser.guessFlexible(endString, start);
             dataList.add(new Event(description, start, end));
 
             if (Integer.parseInt(parts[1]) == 1)
