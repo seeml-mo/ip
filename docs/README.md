@@ -103,13 +103,19 @@ Exits the application.
 
 ---
 
-**Warning:** Keep the `src/main/java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+## FAQ
+
+**Q: How do I transfer my data to another computer?** **A:** Install the app on the other computer and overwrite the empty data file it creates (located at `./data/seemlmot.txt`) with the file that contains the data from your previous Seemlmot folder.
+
+**Q: Where is my data stored exactly?** **A:** All task data is stored in a plain text file at `./data/seemlmot.txt` relative to the project root directory.
 
 ---
 
-### Key Adjustments made:
+## Known Issues
 
-1. **Strict Markdown Hierarchy**: Kept the `#`, `##`, and `###` exactly as they would appear in a professional `.md` documentation.
-2. **Original Warning Block**: Restored the "Warning" section at the end regarding the folder structure.
-3. **Inline Code Formatting**: Used backticks (```) for commands and file paths, as seen in the original "Duke" template.
-4. **Package Path**: Updated the run instructions to point to `seemlmot/Seemlmot.java` (reflecting your package structure).
+* **Manual File Editing:** If you manually edit the `./data/seemlmot.txt` file and introduce formatting errors (e.g., missing `|` delimiters), the application may throw an **Exception** or fail to load tasks correctly. The remedy is to delete the corrupted file and let the application generate a new one.
+* **Special Characters:** Using the pipe character `|` within a task description can confuse the data parser during the next startup. Avoid using `|` in your task descriptions to ensure data integrity.
+
+---
+
+**Warning:** Keep the `src/main/java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
