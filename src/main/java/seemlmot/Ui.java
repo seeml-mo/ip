@@ -35,7 +35,7 @@ public class Ui {
 
         TaskList.initialize( Storage.loadData() );
 
-        System.out.println("Hello! I'm Seemlmot");
+        System.out.println("Hello! I'm Seemlmot.");
         System.out.println(LOGO + GREETING);
     }
 
