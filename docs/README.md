@@ -19,7 +19,19 @@ Prerequisites: **JDK 17**, update Intellij to the most recent version.
 
 
 In the same dialog, set the **Project language level** field to the `SDK default` option.
-4. After that, locate the `src/main/java/seemlmot/Seemlmot.java` file, right-click it, and choose `Run Seemlmot.main()`. If the setup is correct, you should see the welcome message and a notification regarding loaded data.
+4. After that, locate the `src/main/java/seemlmot/Seemlmot.java` file, right-click it, and choose `Run Seemlmot.main()`. If the setup is correct, you should see something like the below as the output:
+```
+ Hello! I'm Seemlmot.
+ ____                        _                  _   
+/ ___|  ___  ___ _ __ ___   | | _ __ ___   ___ | |_ 
+\___ \ / _ \/ _ \ '_ ` _ \  | || '_ ` _ \ / _ \| __|
+ ___) |  __/  __/ | | | | | | || | | | | | (_) | |_ 
+|____/ \___|\___|_| |_| |_| |_||_| |_| |_|\___/ \__|
+What can I do for you?
+
+```
+
+
 
 ---
 
@@ -89,6 +101,21 @@ Exits the application.
 
 ---
 
+## FAQ
+
+**Q: How do I transfer my data to another computer?** **A:** Install the app on the other computer and overwrite the empty data file it creates (located at `./data/seemlmot.txt`) with the file that contains the data from your previous Seemlmot folder.
+
+**Q: Where is my data stored exactly?** **A:** All task data is stored in a plain text file at `./data/seemlmot.txt` relative to the project root directory.
+
+---
+
+## Known Issues
+
+* **Manual File Editing:** If you manually edit the `./data/seemlmot.txt` file and introduce formatting errors (e.g., missing `|` delimiters), the application may throw an `Exception` or fail to load tasks correctly. The remedy is to delete the corrupted file and let the application generate a new one.
+* **Special Characters:** Using the pipe character `|` within a task description can confuse the data parser during the next startup. Avoid using `|` in your task descriptions to ensure data integrity.
+
+---
+
 ## Command Summary
 
 | Action | Format |
@@ -100,21 +127,6 @@ Exits the application.
 | **Mark** | `mark [index]` |
 | **Save** | `save` |
 | **Exit** | `bye` |
-
----
-
-## FAQ
-
-**Q: How do I transfer my data to another computer?** **A:** Install the app on the other computer and overwrite the empty data file it creates (located at `./data/seemlmot.txt`) with the file that contains the data from your previous Seemlmot folder.
-
-**Q: Where is my data stored exactly?** **A:** All task data is stored in a plain text file at `./data/seemlmot.txt` relative to the project root directory.
-
----
-
-## Known Issues
-
-* **Manual File Editing:** If you manually edit the `./data/seemlmot.txt` file and introduce formatting errors (e.g., missing `|` delimiters), the application may throw an **Exception** or fail to load tasks correctly. The remedy is to delete the corrupted file and let the application generate a new one.
-* **Special Characters:** Using the pipe character `|` within a task description can confuse the data parser during the next startup. Avoid using `|` in your task descriptions to ensure data integrity.
 
 ---
 
