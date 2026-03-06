@@ -1,8 +1,13 @@
 package seemlmot;
 
+import java.util.Locale;
 import java.util.Scanner;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 
 /**
@@ -70,27 +75,42 @@ public class Parser {
     }
 
     /**
-     * Attempts to parse a flexible date/time string into a LocalDateTime object.
+     * Interprets a flexible date/time string and converts it into a {@link LocalDateTime} object.
      * <p>
-     * The method tries to identify dates through keywords (e.g., "today", "tomorrow", "monday"),
-     * and interprets time strings (e.g., "2pm", "1400"). If a specific date is not found
-     * but a startTime is provided, it inherits the date from the startTime.
+     * This method employs a two-tiered parsing strategy:
+     * 1. <b>Strict Format Matching:</b> Attempts to parse the input using predefined patterns
+     * (e.g., "yyyy-MM-dd", "MMM dd yyyy HHmm"). These patterns are locale-locked to
+     * {@link Locale#ENGLISH} to ensure consistent parsing regardless of system settings.
+     * 2. <b>Heuristic Parsing:</b> If strict matching fails, it interprets relative date keywords
+     * (e.g., "today", "tomorrow", "monday") and optional time components.
+     * </p>
+     * <p>
+     * <b>Date Inheritance:</b> If no specific date is identified in the input, the method
+     * inherits the date from the provided {@code startTime}. If both are missing, a
+     * {@link SeemlmotException} is thrown.
      * </p>
      *
-     * @param input The raw date/time string provided by the user.
-     * @param startTime A reference time used for date inheritance or overnight checks.
-     * @return A LocalDateTime object representing the interpreted date and time.
-     * @throws DateTimeException If the date or time cannot be recognized from the input.
+     * @param input     The raw date/time string provided by the user.
+     * @param startTime A reference {@link LocalDateTime} used for date inheritance and
+     * detecting overnight task shifts.
+     * @return A {@link LocalDateTime} object representing the interpreted date and time.
+     * @throws SeemlmotException If the date/time cannot be resolved after both
+     * strict and heuristic parsing attempts.
      */
-    public static LocalDateTime guessFlexible(String input, LocalDateTime startTime) throws DateTimeException {
+    public static LocalDateTime guessFlexible(String input, LocalDateTime startTime) {
         String cleanInput = input.trim().toLowerCase();
 
         // 1. Try strict parsing first
-        try {
-            // Note: MMM dd yyyy is more standard for input than MMM dd yyyy
-            return LocalDateTime.parse(cleanInput, DateTimeFormatter.ofPattern("MMM dd yyyy HHmm"));
-        } catch (Exception e) {
-            // Continue to guessing logic
+        DateTimeFormatter[] formatters = {
+                DateTimeFormatter.ofPattern("yyyy-MM-dd[ HH:mm]", Locale.ENGLISH),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH),
+                DateTimeFormatter.ofPattern("MMM dd yyyy[ HHmm]", Locale.ENGLISH),
+                DateTimeFormatter.ofPattern("d/MM/yyyy[ HHmm]", Locale.ENGLISH)
+        };
+        for (DateTimeFormatter f : formatters) {
+            if (isStrictMatch(cleanInput, f)) {
+                return LocalDateTime.parse(cleanInput.trim(), f);
+            }
         }
 
         // 2. Identify Date
@@ -116,14 +136,14 @@ public class Parser {
 
         // If still null, it means no date was provided and no startTime exists to inherit from
         if (date == null) {
-            throw new DateTimeException("Failed to recognize date. Please provide a date or weekday.");
+            throw new SeemlmotException("Failed to recognize date. Please provide a date or weekday.");
         }
 
         // 3. Identify Time (Mandatory)
         LocalTime time;
         String digits = cleanInput.replaceAll("[^0-9]", "");
         if (digits.isEmpty()) {
-            throw new DateTimeException("Missing specific time: Please add a time (e.g., 2pm or 1400).");
+            throw new SeemlmotException("Missing specific time: Please add a time (e.g., 2pm or 1400).");
         }
 
         try {
@@ -135,7 +155,7 @@ public class Parser {
 
             time = LocalTime.of(hour, 0);
         } catch (Exception e) {
-            throw new DateTimeException("Sorry, I couldn't understand the time format in: " + input);
+            throw new SeemlmotException("Sorry, I couldn't understand the time format in: " + input);
         }
 
         // 4. Combine and check for "Overnight" (e.g., 11pm to 1am)
@@ -144,10 +164,25 @@ public class Parser {
             result = result.plusDays(1);
         }
 
-        DateTimeFormatter out = DateTimeFormatter.ofPattern("MMM dd yyyy HHmm");
-        System.out.println("Date & Time processed as follows: " + result.format(out) + " Please write in the format: yyyy-MM-dd HHmm, if guess is not satisfying.");
-
+        DateTimeFormatter out = DateTimeFormatter.ofPattern("MMM dd yyyy HHmm", Locale.ENGLISH);
+        String formatHint = "MMM dd yyyy HHmm";
+        System.out.println("(Date & Time processed as: " + result.format(out) +
+                ". If this is incorrect, please use the format: " + formatHint + ")");
         return result;
     }
 
+    /**
+     * Checks if the input matches any of the strict date-time patterns supported by the system.
+     * * @param input The raw input string to validate.
+     * @return {@code true} if the input conforms to any predefined strict date-time formats;
+     * {@code false} otherwise.
+     */
+    private static boolean isStrictMatch(String input, DateTimeFormatter f) {
+        try {
+            f.parse(input.trim());
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
 }
