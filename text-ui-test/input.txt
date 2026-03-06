@@ -1,3 +1,31 @@
+# --- Normal Usage ---
+todo Buy milk
+deadline Submit Java assignment /by 2026-03-08 23:59
+event Group meeting /from 2026-03-09 14:00 /to 16:00
 list
-deadline Francis submit UG draft /by today 2359
+
+# --- Robustness: Empty Descriptions ---
+todo
+deadline /by 2026-03-08
+event /from 2026-03-09
+
+# --- Robustness: Missing Parameters ---
+deadline Missing time part
+event Missing end time /from 2026-03-09 14:00
+
+# --- Robustness: Invalid Indices ---
+mark 99
+delete 0
+
+# --- Robustness: Unknown Commands ---
+blabla
+echo something
+
+# --- Persistence & Cleanup ---
+mark 1
+list
+save
+delete 3
+list
+save
 bye
