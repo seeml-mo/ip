@@ -32,6 +32,7 @@ public class TaskList {
      */
     public static void addTask(String currentDescription, String type, boolean isTerminalCmd) {
         String description;
+        boolean isTimeError = false;
 
         switch (type) {
         case "T": {
@@ -68,7 +69,11 @@ public class TaskList {
 
             LocalDateTime by = Parser.guessFlexible(byString, null);
 
-            cmdList.add(new Deadline(description, by));
+            if(by != null) {
+                cmdList.add(new Deadline(description, by));
+            }else {
+                isTimeError = true;
+            }
             break;
         }
 
@@ -106,16 +111,20 @@ public class TaskList {
             LocalDateTime start = Parser.guessFlexible(startString, null);
             LocalDateTime end = Parser.guessFlexible(endString, start);
 
-            cmdList.add(new Event(description, start, end));
+            if(start != null && end != null) {
+                cmdList.add(new Event(description, start, end));
+            }else {
+                isTimeError = true;
+            }
             break;
         }
 
         default: {
-            cmdList.add(new Task(currentDescription));
+            throw new SeemlmotException("Error Task Type.");
         }
         }
 
-        if (isTerminalCmd) {
+        if (!isTimeError && isTerminalCmd) {
             System.out.println(" Got it. I've added this task:");
             System.out.println("   " + cmdList.get(cmdList.size() - 1));
             String taskExpression = (cmdList.size() == 1) ? "task" : "tasks";
