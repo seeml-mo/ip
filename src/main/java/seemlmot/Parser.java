@@ -1,14 +1,11 @@
 package seemlmot;
 
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 import java.util.Scanner;
 import java.time.LocalDateTime;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAdjusters;
 
 /**
  * Handles the interpretation of user input and commands.
@@ -99,8 +96,15 @@ public class Parser {
         // 1. Try strict parsing first
         DateTimeFormatter[] formatters = {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("MMM dd yyyy HHmm", Locale.ENGLISH),
-                DateTimeFormatter.ofPattern("d/MM/yyyy HHmm", Locale.ENGLISH)
+
+                new DateTimeFormatterBuilder()
+                        .parseCaseInsensitive()
+                        .appendPattern("MMM dd yyyy HHmm")
+                        .toFormatter(Locale.ENGLISH),
+
+                DateTimeFormatter.ofPattern("d/MM/yyyy HHmm", Locale.ENGLISH),
+
+                DateTimeFormatter.ISO_LOCAL_DATE_TIME
         };
         for (DateTimeFormatter f : formatters) {
             if (isStrictMatch(cleanInput, f)) {

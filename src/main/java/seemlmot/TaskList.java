@@ -112,6 +112,11 @@ public class TaskList {
             LocalDateTime end = Parser.guessFlexible(endString, start);
 
             if(start != null && end != null) {
+                if (start.isAfter(end)) {
+                    throw new SeemlmotException("Error: The start time cannot be later than the end time! " +
+                            "(Start: " + startString + " | End: " + endString + ")");
+                }
+
                 cmdList.add(new Event(description, start, end));
             }else {
                 isTimeError = true;
@@ -155,7 +160,7 @@ public class TaskList {
      * @throws SeemlmotException If the provided index is out of bounds.
      */
     public static void mark(int index, boolean markAsDone) {
-        if (index >= cmdList.size())
+        if (index >= cmdList.size() || index < 0)
             throw new SeemlmotException(" Task does not exist.");
 
         if (markAsDone) {

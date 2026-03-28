@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
  * and an end (by) time.
  */
 public class Event extends Deadline{
-    private final LocalDateTime start;
+    protected LocalDateTime start;
 
     /**
      * Creates a new Event task with the specified description, start time, and end time.

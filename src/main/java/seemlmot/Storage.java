@@ -110,7 +110,7 @@ public class Storage {
 
             String startString, endString;
             startString = parts[3].trim();
-            endString = parts[3].trim();
+            endString = parts[4].trim();
 
             LocalDateTime start = Parser.guessFlexible(startString, null);
             LocalDateTime end = Parser.guessFlexible(endString, start);
@@ -140,9 +140,21 @@ public class Storage {
         try {
             StringBuilder content = new StringBuilder();
             for (Task task : cmdList) {
-                content.append(task.getType()).append(" | ")
+                String type = task.getType();
+                content.append(type).append(" | ")
                         .append(task.isDone() ? 1 : 0).append(" | ")
-                        .append(task.getDescription()).append("\n");
+                        .append(task.getDescription()).append(" | ");
+
+                if (type.equals("D")){
+                    Deadline d = (Deadline) task;
+                    content.append(d.by);
+                }else if (type.equals("E")){
+                    Event e = (Event) task;
+                    content.append(e.start).append(" | ")
+                            .append(e.by);
+                }
+
+                content.append("\n");
             }
 
             Path path = Paths.get(FILE_PATH);

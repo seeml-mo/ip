@@ -64,15 +64,15 @@ Adds a task without a deadline to the list.
 
 Adds a task with a specific deadline.
 
-* Format: `deadline [description] /by [time]`
-* Example: `deadline return book /by Sunday`
+* Format: `deadline [description] /by [MMM dd yyyy HHmm]`
+* Example: `deadline return book /by Mar 12 2026 0159`
 
 ### `event` - Add an Event
 
 Adds a task that occurs during a time range.
 
-* Format: `event [description] /from [start] /to [end]`
-* Example: `event orientation /from Mon 2pm /to 4pm`
+* Format: `event [description] /from [MMM dd yyyy HHmm] /to [MMM dd yyyy HHmm]`
+* Example: `event orientation /from Oct 20 2026 1400 /to Oct 20 2026 1600`
 
 ### `list` - List all tasks
 
@@ -86,6 +86,13 @@ Marks a specific task as completed or incomplete.
 
 * Format: `mark [index]` or `unmark [index]`
 * Example: `mark 1`
+
+### `find` - Find tasks by keyword
+
+Finds tasks whose descriptions contain the given keyword. The keyword can contain spaces.
+
+* Format: `find [keyword]`
+* Example: `find buy milk`
 
 ### `save` - Save current state
 
@@ -118,15 +125,17 @@ Exits the application.
 
 ## Command Summary
 
-| Action | Format |
-| --- | --- |
-| **Todo** | `todo [description]` |
-| **Deadline** | `deadline [description] /by [time]` |
-| **Event** | `event [description] /from [start] /to [end]` |
-| **List** | `list` |
-| **Mark** | `mark [index]` |
-| **Save** | `save` |
-| **Exit** | `bye` |
+| Action       | Format                                        |
+|--------------|-----------------------------------------------|
+| **Todo**     | `todo [description]`                          |
+| **Deadline** | `deadline [description] /by [time]`           |
+| **Event**    | `event [description] /from [start] /to [end]` |
+| **List**     | `list`                                        |
+| **Mark**     | `mark [index]`                                |
+| **Unmark**   | `unmark [index]`                              |
+| **Find**     | `find [keyword]`                              |
+| **Save**     | `save`                                        |
+| **Exit**     | `bye`                                         |
 
 ---
 
