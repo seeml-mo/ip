@@ -37,21 +37,27 @@ public class Parser {
                     break;
                 case "mark":
                     TaskList.mark(currentDescription, true);
+                    Storage.saveState("save", TaskList.getCmdList());
                     break;
                 case "unmark":
                     TaskList.mark(currentDescription, false);
+                    Storage.saveState("save", TaskList.getCmdList());
                     break;
                 case "delete":
                     TaskList.deleteTask(currentDescription);
+                    Storage.saveState("save", TaskList.getCmdList());
                     break;
                 case "todo":
                     TaskList.addTask(currentDescription, "T", true);
+                    Storage.saveState("save", TaskList.getCmdList());
                     break;
                 case "deadline":
                     TaskList.addTask(currentDescription, "D", true);
+                    Storage.saveState("save", TaskList.getCmdList());
                     break;
                 case "event":
                     TaskList.addTask(currentDescription, "E", true);
+                    Storage.saveState("save", TaskList.getCmdList());
                     break;
                 case "save":
                     Storage.saveState(currentDescription, TaskList.getCmdList());
