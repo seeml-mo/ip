@@ -112,8 +112,8 @@ public class TaskList {
             LocalDateTime end = Parser.guessFlexible(endString, start);
 
             if(start != null && end != null) {
-                if (start.isAfter(end)) {
-                    throw new SeemlmotException("Error: The start time cannot be later than the end time! " +
+                if (start.isAfter(end) || start.isEqual(end)) {
+                    throw new SeemlmotException("Error: The start time should be earlier than the end time! " +
                             "(Start: " + startString + " | End: " + endString + ")");
                 }
 
