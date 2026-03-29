@@ -36,13 +36,13 @@ public class Parser {
                     TaskList.list(currentDescription);
                     break;
                 case "mark":
-                    TaskList.mark(Integer.parseInt(currentCmd[1]) - 1, true);
+                    TaskList.mark(currentDescription, true);
                     break;
                 case "unmark":
-                    TaskList.mark(Integer.parseInt(currentCmd[1]) - 1, false);
+                    TaskList.mark(currentDescription, false);
                     break;
                 case "delete":
-                    TaskList.deleteTask(Integer.parseInt(currentCmd[1]) - 1);
+                    TaskList.deleteTask(currentDescription);
                     break;
                 case "todo":
                     TaskList.addTask(currentDescription, "T", true);

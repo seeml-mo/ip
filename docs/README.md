@@ -8,12 +8,10 @@ Prerequisites: **JDK 17**, update Intellij to the most recent version.
 
 1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first).
 2. Open the project into Intellij as follows:
-1. Click `Open`.
-2. Select the project directory, and click `OK`.
-3. If there are any further prompts, accept the defaults.
-
-
-3. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).
+3. Click `Open`.
+4. Select the project directory, and click `OK`.
+5. If there are any further prompts, accept the defaults.
+6. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).
 
 
 
@@ -57,21 +55,21 @@ Your tasks are automatically saved to and loaded from a local file located at `.
 
 Adds a task without a deadline to the list.
 
-* Format: `todo [description]`
+* Format: `todo DESCRIPTION`
 * Example: `todo buy groceries`
 
 ### `deadline` - Add a Deadline
 
 Adds a task with a specific deadline.
 
-* Format: `deadline [description] /by [MMM dd yyyy HHmm]`
+* Format: `deadline DESCRIPTION /by TIME`
 * Example: `deadline return book /by Mar 12 2026 0159`
 
 ### `event` - Add an Event
 
 Adds a task that occurs during a time range.
 
-* Format: `event [description] /from [MMM dd yyyy HHmm] /to [MMM dd yyyy HHmm]`
+* Format: `event DESCRIPTION /from TIME /to TIME`
 * Example: `event orientation /from Oct 20 2026 1400 /to Oct 20 2026 1600`
 
 ### `list` - List all tasks
@@ -80,19 +78,33 @@ Displays all tasks currently in your list with their status (Done/Not Done).
 
 * Format: `list`
 
-### `mark` / `unmark` - Update task status
+### `mark` - Update task status
 
-Marks a specific task as completed or incomplete.
+Marks a specific task as completed.
 
-* Format: `mark [index]` or `unmark [index]`
+* Format: `mark INDEX`
 * Example: `mark 1`
+
+### `unmark` - Update task status
+
+Marks a specific task as incomplete.
+
+* Format: `unmark INDEX`
+* Example: `unmark 1`
 
 ### `find` - Find tasks by keyword
 
 Finds tasks whose descriptions contain the given keyword. The keyword can contain spaces.
 
-* Format: `find [keyword]`
+* Format: `find KEYWORD`
 * Example: `find buy milk`
+
+### `delete` - Remove a task
+
+Removes a specific task from the list using its index number.
+
+* Format: `delete INDEX`
+* Example: `delete 1`
 
 ### `save` - Save current state
 
@@ -125,17 +137,18 @@ Exits the application.
 
 ## Command Summary
 
-| Action       | Format                                        |
-|--------------|-----------------------------------------------|
-| **Todo**     | `todo [description]`                          |
-| **Deadline** | `deadline [description] /by [time]`           |
-| **Event**    | `event [description] /from [start] /to [end]` |
-| **List**     | `list`                                        |
-| **Mark**     | `mark [index]`                                |
-| **Unmark**   | `unmark [index]`                              |
-| **Find**     | `find [keyword]`                              |
-| **Save**     | `save`                                        |
-| **Exit**     | `bye`                                         |
+| Action       | Format                                  |
+|--------------|-----------------------------------------|
+| **Todo**     | `todo DESCRIPTION`                      |
+| **Deadline** | `deadline DESCRIPTION /by TIME`         |
+| **Event**    | `event DESCRIPTION /from TIME /to TIME` |
+| **List**     | `list`                                  |
+| **Mark**     | `mark INDEX`                            |
+| **Unmark**   | `unmark INDEX`                          |
+| **Find**     | `find KEYWORD`                          |
+| **Delete**   | `delete INDEX`                          |
+| **Save**     | `save`                                  |
+| **Exit**     | `bye`                                   |
 
 ---
 

@@ -13,6 +13,9 @@ public class TaskList {
     private static final String PREFIX_TODO = "todo ";
     private static final String PREFIX_DEADLINE = "deadline ";
     private static final String PREFIX_EVENT = "event ";
+    public static final String PREFIX_MARK = "mark ";
+    public static final String PREFIX_UNMARK = "unmark ";
+    public static final String PREFIX_DELETE = "delete ";
     private static final String PREFIX_FIND = "find ";
     public static final String PARAM_BY = "/by ";
     public static final String PARAM_FROM = "/from ";
@@ -153,43 +156,87 @@ public class TaskList {
     }
 
     /**
-     * Marks a specific task as done or undone.
+     * Marks a task as done or undone based on the provided index string.
+     * This method handles the parsing of the index and validates its existence
+     * within the current task list.
      *
-     * @param index The 0-based index of the task in the list.
-     * @param markAsDone True to mark as done, false to mark as undone.
-     * @throws SeemlmotException If the provided index is out of bounds.
+     * @param currentDescription The full raw command string from the user.
+     * @param markAsDone True to mark the task as completed, false to mark as incomplete.
+     * @throws SeemlmotException If the index string is not a valid integer or if
+     * the index is out of the bounds of the task list.
      */
-    public static void mark(int index, boolean markAsDone) {
-        if (index >= cmdList.size() || index < 0)
-            throw new SeemlmotException(" Task does not exist.");
+    public static void mark(String currentDescription, boolean markAsDone) {
+        try {
+            String indexStr;
+            if (markAsDone) {
+                if (currentDescription.trim().length() <= PREFIX_MARK.length()){
+                    throw new SeemlmotException("The task number should not be empty!!!");
+                }
 
-        if (markAsDone) {
-            cmdList.get(index).markAsDone();
-            System.out.println(" Nice! I've marked this task as done:\n"
-                    + "   " + cmdList.get(index));
-        } else {
-            cmdList.get(index).markAsUndone();
-            System.out.println(" OK, I've marked this task as not done yet:\n"
-                    + "   " + cmdList.get(index));
+                indexStr = currentDescription.substring(
+                        PREFIX_MARK.length()
+                ).trim();
+            }else{
+                if (currentDescription.trim().length() <= PREFIX_UNMARK.length()){
+                    throw new SeemlmotException("The task number should not be empty!!!");
+                }
+
+                indexStr = currentDescription.substring(
+                        PREFIX_UNMARK.length()
+                ).trim();
+            }
+
+            int index = Integer.parseInt(indexStr) - 1;
+
+            if (index >= cmdList.size() || index < 0)
+                throw new SeemlmotException(" Task does not exist.");
+
+            if (markAsDone) {
+                cmdList.get(index).markAsDone();
+                System.out.println(" Nice! I've marked this task as done:\n"
+                        + "   " + cmdList.get(index));
+            } else {
+                cmdList.get(index).markAsUndone();
+                System.out.println(" OK, I've marked this task as not done yet:\n"
+                        + "   " + cmdList.get(index));
+            }
+        } catch (NumberFormatException e) {
+            throw new SeemlmotException("Please follow the format: (un)mark <number>");
         }
     }
 
     /**
-     * Removes a task from the list at the specified index.
+     * Removes a task from the list based on the provided index string.
+     * This method validates the input format, parses the string, and removes the
+     * corresponding task if the index exists within the list.
      *
-     * @param index The 0-based index of the task to be deleted.
-     * @throws SeemlmotException If the index is invalid.
+     * @param currentDescription The full raw command string from the user.
+     * @throws SeemlmotException If the input is empty, not a valid number,
+     * or if the index is out of bounds.
      */
-    public static void deleteTask(int index) {
-        if (index >= cmdList.size())
-            throw new SeemlmotException(" Task does not exist.");
+    public static void deleteTask(String currentDescription) {
+        try {
+            if (currentDescription.trim().length() <= PREFIX_DELETE.length()){
+                throw new SeemlmotException("The task number should not be empty!!!");
+            }
 
-        System.out.println(" Noted. I've removed this task:\n" +
-                "  " + cmdList.get(index));
+            String indexStr = currentDescription.substring(
+                    PREFIX_DELETE.length()
+            ).trim();
 
-        cmdList.remove(index);
+            int index = Integer.parseInt(indexStr) - 1;
+            if (index >= cmdList.size() || index < 0)
+                throw new SeemlmotException(" Task does not exist.");
 
-        System.out.println(" Now you have " + cmdList.size() + " tasks in the list.");
+            System.out.println(" Noted. I've removed this task:\n" +
+                    "  " + cmdList.get(index));
+
+            cmdList.remove(index);
+
+            System.out.println(" Now you have " + cmdList.size() + " tasks in the list.");
+        } catch (NumberFormatException e) {
+            throw new SeemlmotException("Please follow the format: delete <number>");
+        }
     }
 
     /**
